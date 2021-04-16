@@ -10,7 +10,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model= Article
-        exclude= ("id",)
+        fields = "__all__"
 
     def get_time_since_publication(self, object):
         publication_date= object.publication_date
