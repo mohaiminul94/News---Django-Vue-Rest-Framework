@@ -4,21 +4,10 @@ from rest_framework import serializers
 from news.models import Article, Journalist
 
 
-class JournalistSerializer(serializers.ModelSerializer):
-    # articles = serializers.HyperlinkedRelatedField(many=True,
-    #                                                read_only=True,
-    #                                                view_name="article-detail")
-    # articles = ArticleSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Journalist
-        fields = "__all__"
-
-
 class ArticleSerializer(serializers.ModelSerializer):
 
     time_since_publication= serializers.SerializerMethodField()
-    author= JournalistSerializer()
+    # author= JournalistSerializer(read_only=True)
 
     class Meta:
         model= Article
@@ -39,3 +28,12 @@ class ArticleSerializer(serializers.ModelSerializer):
         if len(value) < 60:
             raise serializers.ValidationError("The title has to be at least 60 chars long!")
         return value
+    
+    
+class JournalistSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Journalist
+        fields = "__all__"
+        
+    articles= ArticleSerializer(many=True, read_only=True)
